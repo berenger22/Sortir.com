@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="col-md-auto">
+			<div class=" pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+				<h2>Mon profil</h2>
+			</div>
+			{{form_start(form)}}
+			{{form_row(form.pseudo)}}
+			{{form_row(form.nom)}}
+			{{form_row(form.prenom)}}
+			{{form_row(form.telephone)}}
+			{{form_row(form.mail)}}
+			{{form_row(form.password)}}
+			{{form_row(form.verifPassword)}}
+			{{form_row(form.campus)}}
+			<div class="row justify-content-md-center">
+				<div class="form-group col-md-6">
+					<button class="btn btn-lg btn-outline-primary btn-block" type="submit">Modifier</button>
+				</div>
+			</div>
+			<div class="row justify-content-md-center">
+				<div class="form-group col-md-6">
+					<a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('home')}}" role="button">Annuler</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{form_end(form)}}
+{% endblock %}
+

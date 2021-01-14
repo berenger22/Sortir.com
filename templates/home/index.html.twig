@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="container">
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success">
+				{{message}}
+			</div>
+		{% endfor %}
+		<div class="row-justify-content-end">
+			<h3 class="text-right">Date du jour :
+				<i>{{ "now"|date("d/m/Y") }}</i>
+			</h3>
+		</div>
+		<div class="row-justify-content-end">
+			<h3 class="text-right">Bonjour
+				<i>{{app.user.pseudo}}</i>
+			</h3>
+		</div>
+		<div class="jumbotron">
+			<div class="container">
+				{{form_start(form)}}
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							{{form_row(form.campus)}}
+						</div>
+						<div class="form-group">
+							{{form_row(form.nomSortie)}}
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							{{form_row(form.sortieOrganisateur)}}
+						</div>
+						<div class="form-group">
+							{{form_row(form.sortieInscrit)}}
+						</div>
+						<div class="form-group">
+							{{form_row(form.sortiePasInscrit)}}
+						</div>
+						<div class="form-group">
+							{{form_row(form.sortiePassee)}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div class="form-group">
+							{{form_row(form.debutDate)}}
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group">
+							{{form_row(form.finDate)}}
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-lg btn-outline-primary btn-block" type="submit">Rechercher</button>
+				</div>
+
+
+				{{form_end(form)}}
+			</div>
+		</div>
+		<table class="table table-hover">
+			<thead>
+				<tr class="table-secondary">
+					<th scope="col">Nom de la sortie</th>
+					<th scope="col">Date de la sortie</th>
+					<th scope="col">Clôture</th>
+					<th scope="col">Inscrits/places</th>
+					<th scope="col">Etat</th>
+					<th scope="col">Inscrit</th>
+					<th scope="col">Organisateur</th>
+					<th scope="col">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for sortie in sorties %}
+					<tr>
+						<th>{{sortie.nom}}</th>
+						<td>{{sortie.dateHeureDebut|date("d/m/Y / H:i")}}</td>
+						<td>{{sortie.dateLimiteInscription|date("d/m/Y")}}</td>
+						<td>{{sortie.nbInscriptionsMax}}</td>
+						{% if sortie.etat is not null %}
+							<td>{{sortie.etat.libelle}}</td>
+						{% else %}
+							<td>Pas d'état</td>
+						{% endif %}
+						<td>XXX</td>
+						<td>
+							<a href="{{path('afficherProfil', {'id' : sortie.organise.id})}}" class="btn btn-link">{{sortie.organise.pseudo}}</a>
+						</td>
+						{% if sortie.organise.pseudo == app.user.pseudo %}
+							<td>
+								<a href="{{path('modifSortie', {'id' : sortie.id})}}" class="btn btn-link">Modifier</a>
+								<a href="#" class="btn btn-link">S'inscrire</a>
+							</td>
+						{% else %}
+							<td>
+								<a href="#" class="btn btn-link">S'inscrire</a>
+							</td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<div class="row justify-content-md-center">
+			<div class="form-group col-md-6">
+				<a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('creerSortie')}}" role="button">Créer une sortie</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

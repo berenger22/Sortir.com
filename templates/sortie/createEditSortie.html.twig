@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sortie{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="col-md-auto">
+        <div class=" pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            {% if isModification %}
+                 <h2>Modificztion de la sortie : {{sortie.nom}}</h2> 
+            {% else %}
+                <h2>Créer une sortie</h2>
+            {% endif %}   
+        </div>
+        {{form_start(form)}}
+        {{form_widget(form)}}
+        <div class="row justify-content-md-center">
+            <div class="form-group col-md-6">
+                {{form_row(form.enregistrer)}}
+            </div>
+            <div class="form-group col-md-6">
+                {{form_row(form.publier)}}
+            </div>
+        </div>
+            {% if isModification %}
+            <div class="row justify-content-md-center">
+                <div class="form-group col-md-6">
+                    <a class="btn btn-lg btn-outline-danger btn-block" href="#" role="button">Supprimer la sortie</a>
+                </div>
+            </div>
+            {% endif %} 
+        <div class="row justify-content-md-center">
+            <div class="form-group col-md-6">
+                <a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('home')}}" role="button">Annuler</a>
+            </div>
+        </div>
+    </div>
+</div>
+{{form_end(form)}}
+{% endblock %}
