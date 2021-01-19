@@ -57,6 +57,38 @@ class LieuVilleFixtures extends Fixture
                 ->setLongitude(-1.6484);
         $manager->persist($lieu3);
 
+        $lieu4 = new Lieu();
+        $lieu4->setNom('Bar de la paix')
+                ->setRue('Rue de la soif')
+                ->setVille($ville2)
+                ->setLatitude(47.326)
+                ->setLongitude(-1.6454);
+        $manager->persist($lieu4);
+
+        $lieu5 = new Lieu();
+        $lieu5->setNom('Terrain de basket')
+                ->setRue('Rue du sport')
+                ->setVille($ville2)
+                ->setLatitude(47.2176)
+                ->setLongitude(-1.6484);
+        $manager->persist($lieu5);
+
+        $lieu6 = new Lieu();
+        $lieu6->setNom('Arcade')
+                ->setRue('Boulevard du Gamer')
+                ->setVille($ville2)
+                ->setLatitude(37.2176)
+                ->setLongitude(2.6484);
+        $manager->persist($lieu6);
+
+        $lieu7 = new Lieu();
+        $lieu7->setNom('E.N.I.')
+                ->setRue('Impasse ENI')
+                ->setVille($ville1)
+                ->setLatitude(46.2276)
+                ->setLongitude(-1.6484);
+        $manager->persist($lieu7);
+
         $manager->flush();
     }
 }

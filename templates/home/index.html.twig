@@ -63,7 +63,7 @@
 				{{form_end(form)}}
 			</div>
 		</div>
-		<table class="table table-hover">
+		<table class="table table-hover text-center">
 			<thead>
 				<tr class="table-secondary">
 					<th scope="col">Nom de la sortie</th>
@@ -82,7 +82,7 @@
 						<th>{{sortie.nom}}</th>
 						<td>{{sortie.dateHeureDebut|date("d/m/Y / H:i")}}</td>
 						<td>{{sortie.dateLimiteInscription|date("d/m/Y")}}</td>
-						<td>{{sortie.nbInscriptionsMax}}</td>
+						<td>{{sortie.participants|length }}/{{sortie.nbInscriptionsMax}}</td>
 						{% if sortie.etat is not null %}
 							<td>{{sortie.etat.libelle}}</td>
 						{% else %}
@@ -95,11 +95,11 @@
 						{% if sortie.organise.pseudo == app.user.pseudo %}
 							<td>
 								<a href="{{path('modifSortie', {'id' : sortie.id})}}" class="btn btn-link">Modifier</a>
-								<a href="#" class="btn btn-link">S'inscrire</a>
+								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-link">Afficher - S'inscrire</a>
 							</td>
 						{% else %}
 							<td>
-								<a href="#" class="btn btn-link">S'inscrire</a>
+								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-link">Afficher - S'inscrire</a>
 							</td>
 						{% endif %}
 					</tr>

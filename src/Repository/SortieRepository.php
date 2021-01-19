@@ -55,7 +55,7 @@ class SortieRepository extends ServiceEntityRepository
         }
         if($filtre->getSortiePassee()){
             $query = $query->andWhere("s.etat = :passee")
-                            ->setParameter("passee", 5);
+                            ->setParameter("passee", "Passée");
         }
         return $query->getQuery()->getResult();
     }

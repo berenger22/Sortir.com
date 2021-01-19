@@ -37,6 +37,24 @@ class AppFixtures extends Fixture
                 ->setTelephone('0102030405');
         $manager->persist($user3);
 
+        $user4 = new Participant();
+        $user4->setUsername('jojo')
+                ->setNom('Zarco')
+                ->setPrenom('Johann')
+                ->setPassword('$argon2id$v=19$m=65536,t=4,p=1$L0FsejBOZzBTNUFlLlNCcw$FRMR0pDuwdZTwi/9PK9zqzBELzn88FjG4BWng7aDGJo')
+                ->setMail('johan@zarco.fr')
+                ->setTelephone('0987654311');
+        $manager->persist($user4);
+
+        $user5 = new Participant();
+        $user5->setUsername('lulu')
+                ->setNom('Lagrosse')
+                ->setPrenom('Lulu')
+                ->setPassword('$argon2id$v=19$m=65536,t=4,p=1$L0FsejBOZzBTNUFlLlNCcw$FRMR0pDuwdZTwi/9PK9zqzBELzn88FjG4BWng7aDGJo')
+                ->setMail('lulu@lagrosse.fr')
+                ->setTelephone('0702030405');
+        $manager->persist($user5);
+
         $manager->flush();
     }
 }

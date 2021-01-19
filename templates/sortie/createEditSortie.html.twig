@@ -7,13 +7,71 @@
     <div class="col-md-auto">
         <div class=" pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
             {% if isModification %}
-                 <h2>Modificztion de la sortie : {{sortie.nom}}</h2> 
+            <h2>Modification de la sortie : {{sortie.nom}}</h2>
             {% else %}
-                <h2>Créer une sortie</h2>
-            {% endif %}   
+            <h2>Créer une sortie</h2>
+            {% endif %}
         </div>
         {{form_start(form)}}
-        {{form_widget(form)}}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span class="text-secondary">Nom de la sortie :</span>
+                </div>
+                <div class="form-group">
+                    {{form_widget(form.nom)}}
+                </div>
+                <div class="form-group">
+                    <span class="text-secondary">Date et heure de la sortie :</span>
+                </div>
+                <div class="form-group">
+                    {{form_widget(form.dateHeureDebut)}}
+                </div>
+                <div class="form-group">
+                    <span class="text-secondary">Date limite dinscription :</span>
+                </div>
+                <div class="form-group">
+                    {{form_widget(form.dateLimiteInscription)}}
+                </div>
+                <div class="form-group">
+                    <span class="text-secondary">Durée (en minutes) :</span>
+                </div>
+                <div class="form-group">
+                    {{form_widget(form.duree)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span class="text-secondary">Nombre de places :</span>
+                </div>
+                <div class="form-group">
+                    {{form_widget(form.nbInscriptionsMax)}}
+                </div>
+                <div class="form-group">
+                    <span class="text-secondary">Campus :</span>
+                </div>
+                <div class="form-group">
+                    {{form_widget(form.campus)}}
+                </div>
+                <div class="form-group">
+                    <span class="text-secondary">Lieu et Ville :</span>
+                    <button type="button" class="btn btn-light float-right" data-bs-toggle="modal"
+                        data-bs-target="#myModal">
+                        <i class="bi bi-plus-circle-fill"></i> Ajouter
+                    </button>
+
+                </div>
+                <div class="form-group">
+                    {{form_widget(form.lieu)}}
+                </div>
+                <div class="form-group">
+                    <span class="text-secondary">Description et infos :</span>
+                </div>
+                <div class="form-group">
+                    {{form_widget(form.infosSortie)}}
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-md-center">
             <div class="form-group col-md-6">
                 {{form_row(form.enregistrer)}}
@@ -22,13 +80,13 @@
                 {{form_row(form.publier)}}
             </div>
         </div>
-            {% if isModification %}
-            <div class="row justify-content-md-center">
-                <div class="form-group col-md-6">
-                    <a class="btn btn-lg btn-outline-danger btn-block" href="#" role="button">Supprimer la sortie</a>
-                </div>
+        {% if isModification %}
+        <div class="row justify-content-md-center">
+            <div class="form-group col-md-6">
+                <a class="btn btn-lg btn-outline-danger btn-block" href="#" role="button">Supprimer la sortie</a>
             </div>
-            {% endif %} 
+        </div>
+        {% endif %}
         <div class="row justify-content-md-center">
             <div class="form-group col-md-6">
                 <a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('home')}}" role="button">Annuler</a>
@@ -37,4 +95,45 @@
     </div>
 </div>
 {{form_end(form)}}
+
+<!-- Modal -->
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un lieu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{form_start(formLieu)}}
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Nom :</label>
+                    {{form_widget(formLieu.nom)}}
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">Rue :</label>
+                    {{form_widget(formLieu.rue)}}
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">Latitude :</label>
+                    {{form_widget(formLieu.latitude)}}
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">Longitude :</label>
+                    {{form_widget(formLieu.longitude)}}
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">Ville :</label>
+                    {{form_widget(formLieu.ville)}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+            {{form_end(formLieu)}}
+        </div>
+    </div>
+</div>
 {% endblock %}
