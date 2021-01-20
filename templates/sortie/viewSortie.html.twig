@@ -117,23 +117,16 @@
 					<tbody>
 						{% for participant in sortie.participants %}
 							<tr>
-								<td>{{ participant.pseudo }}</td>
+								<td><a href="{{path('afficherProfil', {'id' : participant.id})}}"
+									class="btn btn-link">{{participant.pseudo}}</a></td>
 								<td>{{ participant.nom|upper }} {{ participant.prenom }}</td>
 							</tr>
-
 						{% endfor %}
 					</tbody>
 				</table>
 			</div>
 			<div class="col-md-6 mt-5 text-center">
-				<form method="POST" action="{{ path('inscriptionSortie', {'id': sortie.id}) }}" onsubmit="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">
-					<input type="hidden" name="_method" value="INSCRIPTION">
-					<input type="hidden" name="_token" value="{{ csrf_token('inscription'~ sortie.id) }}">
-					<button class="btn btn-lg btn-outline-primary">S'inscrire</button>
-				</form>
-				<div class="mt-3 text-center">
 					<a class="btn btn-lg btn-outline-secondary" href="{{path('home')}}" role="button">Retour</a>
-				</div>
 			</div>
 		</div>
 	</div>

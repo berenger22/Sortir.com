@@ -2,18 +2,19 @@
 
 {% block title %}profil de {{participant.pseudo}}
 {% endblock %}
-
 {% block body %}
 <div class="container">
 	<div class="row justify-content-md-center">
-		<div class="col-6 text-center">
+		<div class="col-6">
 			<div class="row align-self-center">
-				
+				<div class="text-center mt-5">
+					<img src="{{asset('images/persoMario.jpg')}}" class="rounded"
+						style="max-width: 350px;max-height: 350px;">
+				</div>
 			</div>
-			<img src="{{asset('images/persoMario.jpg')}}" style="max-width: 350px;max-height: 350px;">
 		</div>
-		<div class="col-6 col-md-4">
-			<div class=" pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<div class="col-6">
+			<div class=" text-center mt-5">
 				<h2>{{participant.pseudo}}</h2>
 			</div>
 			<div class="row">
@@ -56,14 +57,12 @@
 					<p>{{participant.campus.nom}}</p>
 				</div>
 			</div>
-			
-			<div class="row justify-content-md-center">
-				<div class="form-group col-md-6">
-					<a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('home')}}" role="button">Retour</a>
-				</div>
+		</div>
+		<div class="row">
+			<div class=" col-6">
+				<a class="btn btn-lg btn-outline-secondary" href="{{path('home')}}" role="button">Retour</a>
 			</div>
 		</div>
 	</div>
 </div>
 {% endblock %}
-

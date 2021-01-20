@@ -1,0 +1,45 @@
+<div class="jumbotron">
+    <div class="container">
+        {{form_start(form)}}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_row(form.campus)}}
+                </div>
+                <div class="form-group">
+                    {{form_row(form.nomSortie)}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form_row(form.sortieOrganisateur)}}
+                </div>
+                <div class="form-group">
+                    {{form_row(form.sortieInscrit)}}
+                </div>
+                <div class="form-group">
+                    {{form_row(form.sortiePasInscrit)}}
+                </div>
+                <div class="form-group">
+                    {{form_row(form.sortiePassee)}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{form_row(form.debutDate)}}
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    {{form_row(form.finDate)}}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-outline-primary btn-block" type="submit">Rechercher</button>
+        </div>
+        {{form_end(form)}}
+    </div>
+</div>

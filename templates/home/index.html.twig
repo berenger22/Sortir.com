@@ -16,53 +16,7 @@
 				<i>{{app.user.pseudo}}</i>
 			</h3>
 		</div>
-		<div class="jumbotron">
-			<div class="container">
-				{{form_start(form)}}
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							{{form_row(form.campus)}}
-						</div>
-						<div class="form-group">
-							{{form_row(form.nomSortie)}}
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							{{form_row(form.sortieOrganisateur)}}
-						</div>
-						<div class="form-group">
-							{{form_row(form.sortieInscrit)}}
-						</div>
-						<div class="form-group">
-							{{form_row(form.sortiePasInscrit)}}
-						</div>
-						<div class="form-group">
-							{{form_row(form.sortiePassee)}}
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-						<div class="form-group">
-							{{form_row(form.debutDate)}}
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-group">
-							{{form_row(form.finDate)}}
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<button class="btn btn-lg btn-outline-primary btn-block" type="submit">Rechercher</button>
-				</div>
-
-
-				{{form_end(form)}}
-			</div>
-		</div>
+		{% include "home/filtre.html.twig" %}
 		<table class="table table-hover text-center">
 			<thead>
 				<tr class="table-secondary">
@@ -83,34 +37,49 @@
 						<td>{{sortie.dateHeureDebut|date("d/m/Y / H:i")}}</td>
 						<td>{{sortie.dateLimiteInscription|date("d/m/Y")}}</td>
 						<td>{{sortie.participants|length }}/{{sortie.nbInscriptionsMax}}</td>
-						{% if sortie.etat is not null %}
-							<td>{{sortie.etat.libelle}}</td>
-						{% else %}
-							<td>Pas d'état</td>
-						{% endif %}
-						<td>XXX</td>
+						<td>{{sortie.etat.libelle}}</td>
+						<td>
+						{% for inscrit in inscrits %}
+							{% if inscrit.id == sortie.id %}
+								<i class="bi bi-check2-square"></i>
+							{% endif %}
+						{% endfor %}
+						</td>
 						<td>
 							<a href="{{path('afficherProfil', {'id' : sortie.organise.id})}}" class="btn btn-link">{{sortie.organise.pseudo}}</a>
 						</td>
-						{% if sortie.organise.pseudo == app.user.pseudo %}
-							<td>
-								<a href="{{path('modifSortie', {'id' : sortie.id})}}" class="btn btn-link">Modifier</a>
-								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-link">Afficher - S'inscrire</a>
-							</td>
+						<td>
+						{% if sortie.organise.id == app.user.id %}
+							{% if sortie.etat.libelle == 'Créée' and sortie.etat.libelle != 'Annulée'  %}
+								<a href="{{path('modifSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Modifier</a>
+								<a href="{{path('annuleSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous annuler cette sortie ?')">Annuler</a>
+							{% elseif sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle == 'Clôturée' %}
+								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
+								<a href="{{path('annuleSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous annuler cette sortie ?')">Annuler</a>
+							{% else %}
+								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
+							{% endif %}
+							{% if sortie.etat.libelle == 'Ouverte'  %}
+								<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
+							{% endif %}
 						{% else %}
-							<td>
-								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-link">Afficher - S'inscrire</a>
-							</td>
+							{% if sortie.etat.libelle != 'Créée' %}
+								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
+							{% endif %}	
+							{% if sortie.etat.libelle == 'Ouverte' %}
+								<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
+							{% endif %}	
 						{% endif %}
 					</tr>
 				{% endfor %}
 			</tbody>
-		</table>
-		<div class="row justify-content-md-center">
-			<div class="form-group col-md-6">
-				<a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('creerSortie')}}" role="button">Créer une sortie</a>
-			</div>
+		</tbody>
+	</table>
+	<div class="row justify-content-md-center">
+		<div class="form-group col-md-6">
+			<a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('creerSortie')}}" role="button">Créer une
+													sortie</a>
 		</div>
 	</div>
-{% endblock %}
+</div>{% endblock %}
 

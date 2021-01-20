@@ -27,16 +27,21 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
         $filtre->setIdUser($this->getUser()->getId());
         
+        //Recherche les sorties selon le filtre et gère les états
         $sorties = $repo->findAllSorties($filtre);
         foreach ($sorties as $sortie) {
             $outil = OutilSerie::gererEtat($sortie, $em);
         }
-        dd($sorties);
+
+        //recherche les sorties pour l'utilisateur est inscrit
+        $inscrits = $repo->findInscrit($this->getUser()->getId());
+        
         return $this->render('home/index.html.twig', [
             'sorties' => $sorties,
             'util' => $util->getLastUsername(),
             'error' => $util->getLastAuthenticationError(),
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'inscrits' => $inscrits
         ]);
     }
 }

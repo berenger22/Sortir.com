@@ -60,7 +60,14 @@ class SortieRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    
+    public function findInscrit($id)
+    {
+        return $this->createQueryBuilder('s')
+                ->andWhere(":inscrit MEMBER OF s.participants")
+                ->setParameter("inscrit", $id)
+                ->getQuery()
+                ->getResult();
+    }
 
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects

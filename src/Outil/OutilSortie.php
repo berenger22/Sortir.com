@@ -22,20 +22,17 @@ class OutilSerie
         $now = (new \DateTime())->getTimestamp();
         $nbreParticipants = count($sortie->getParticipants());
 
-        if($dateFin < $now){
-            $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Clôturée']);
-            $sortie->setEtat($etat);
-        }elseif($nbreParticipants === $sortie->getNbInscriptionsMax() ){
-            $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Clôturée']);
-            $sortie->setEtat($etat);
-        }elseif($dateDebut < $now && $fin > $now){
-            $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Activitée en cours']);
-            $sortie->setEtat($etat);
-        }elseif($fin > $now){
+        if($fin < $now && $sortie->getEtat()->getLibelle() != 'Passée'){
             $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Passée']);
             $sortie->setEtat($etat);
-        }else { 
-            $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
+        }elseif($dateFin < $now && $sortie->getEtat()->getLibelle() != 'Clôturée'){
+            $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Clôturée']);
+            $sortie->setEtat($etat);      
+        }elseif($nbreParticipants === $sortie->getNbInscriptionsMax() && $sortie->getEtat()->getLibelle() != 'Clôturée'){
+            $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Clôturée']);
+            $sortie->setEtat($etat);
+        }elseif(($dateDebut < $now && $fin > $now) && $sortie->getEtat()->getLibelle() != 'Activitée en cours'){
+            $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Activitée en cours']);
             $sortie->setEtat($etat);
         }
         $em->persist($sortie);

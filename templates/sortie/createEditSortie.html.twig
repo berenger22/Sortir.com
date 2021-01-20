@@ -83,13 +83,17 @@
         {% if isModification %}
         <div class="row justify-content-md-center">
             <div class="form-group col-md-6">
-                <a class="btn btn-lg btn-outline-danger btn-block" href="#" role="button">Supprimer la sortie</a>
+                <form method="POST" action="{{ path('annuleSortie', {'id': sortie.id}) }}" onsubmit="return confirm('Etes vous sur de vouloir annuler cette sortie ?')">
+					<input type="hidden" name="_method" value="DELETE">
+					<input type="hidden" name="_token" value="{{ csrf_token('annuleSortie'~ sortie.id) }}">
+					<button class="btn btn-lg btn-outline-danger btn-block">Annuler la sortie</button>
+				</form>
             </div>
         </div>
         {% endif %}
         <div class="row justify-content-md-center">
             <div class="form-group col-md-6">
-                <a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('home')}}" role="button">Annuler</a>
+                <a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('home')}}" role="button">Retour</a>
             </div>
         </div>
     </div>
