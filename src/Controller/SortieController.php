@@ -23,8 +23,7 @@ class SortieController extends AbstractController
     public function createEditSortie(Request $request, Sortie $sortie = null , EntityManagerInterface $em): Response
     {
         if(!$sortie){
-            $sortie = new Sortie();
-            
+            $sortie = new Sortie();  
         }
         
         $sortie->setCampus($this->getUser()->getCampus());
@@ -85,6 +84,33 @@ class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
             $this->addFlash('success', "Vous êtes inscrit à la sortie !");
+        }
+        return $this->redirectToRoute('home');
+    }
+
+
+    /**
+     * @Route("/seDesister/{id}", name="seDesisterSortie", requirements={"id"="\d+"})
+     */
+    public function seDesisterSortie(Sortie $sortie, EntityManagerInterface $em)
+    {
+        $participants = $sortie->getParticipants()->getValues();
+        $now = (new \DateTime())->getTimestamp();
+        foreach ($participants as $participant) {
+            if($participant->getId() == $this->getUser()->getId()){
+                if($sortie->getDateHeureDebut()->getTimestamp() > $now ){
+                    $this->addFlash('success', "Vous vous êtes bien retiré de la sortie !!");
+                    if($sortie->getDateLimiteInscription()->getTimestamp() > $now){
+                        $sortie->removeParticipant($participant);
+                        $em->persist($sortie);
+                        $em->flush();
+                    }
+                }else{
+                    $this->addFlash('success', "Vous ne pouvez plus vous désister de la sortie !!");
+                }
+            }else{
+                $this->addFlash('success', "Vous n'avez pas à accès !!");
+            }
         }
         return $this->redirectToRoute('home');
     }

@@ -59,15 +59,17 @@
 							{% else %}
 								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
 							{% endif %}
-							{% if sortie.etat.libelle == 'Ouverte'  %}
+							{% if sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle !='Clôturée'  %}
 								<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
+								<a href="{{path('seDesisterSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary mt-1" onclick="return confirm('Etes vous sur de vouloir vous désister à cette sortie ?')">Se désister</a>
 							{% endif %}
 						{% else %}
 							{% if sortie.etat.libelle != 'Créée' %}
 								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
 							{% endif %}	
-							{% if sortie.etat.libelle == 'Ouverte' %}
+							{% if sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle !='Clôturée'%}
 								<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
+								<a href="{{path('seDesisterSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary mt-1" onclick="return confirm('Etes vous sur de vouloir vous désister à cette sortie ?')">Se désister</a>
 							{% endif %}	
 						{% endif %}
 					</tr>
