@@ -2,17 +2,20 @@
 
 namespace App\Entity;
 
-use App\Repository\ParticipantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
+ * @Vich\Uploadable
  * @UniqueEntity(
  * fields ={"email"}, message="L'adresse mail éxiste déjà !",
  *  {"pseudo"}, message="le pseudo existe déjà"
@@ -69,6 +72,26 @@ class Participant implements UserInterface
      * @Assert\Email()
      */
     private $mail;
+
+    /**
+     * @Assert\Image(mimeTypes="image/jpeg")
+     * @Vich\UploadableField(mapping="imageParticipant", fileNameProperty="imageName")
+     * @var File|null
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $imageName;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \DateTimeInterface|null
+     */
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -245,6 +268,49 @@ class Participant implements UserInterface
         return $this;
     }
 
+    /** 
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile 
+     */ 
+    public function setImageFile(?File $imageFile = null): self
+    {
+        $this->imageFile = $imageFile;
+        if($this->imageFile instanceof UploadedFile){
+            $this->updatedAt = new \DateTime('now');
+        }
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param  \DateTimeInterface|null  $updatedAt
+     * @return  self
+     */ 
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
     public function getAdministrateur(): ?bool
     {
         return $this->administrateur;
@@ -295,7 +361,6 @@ class Participant implements UserInterface
     public function removeInscrit(Sortie $inscrit): self
     {
         $this->inscrits->removeElement($inscrit);
-
         return $this;
     }
 
@@ -320,12 +385,10 @@ class Participant implements UserInterface
     public function removeOrganise(Sortie $organise): self
     {
         if ($this->organise->removeElement($organise)) {
-            // set the owning side to null (unless already changed)
             if ($organise->getOrganise() === $this) {
                 $organise->setOrganise(null);
             }
         }
-
         return $this;
     }
 
@@ -337,7 +400,7 @@ class Participant implements UserInterface
     public function setCampus(?Campus $campus): self
     {
         $this->campus = $campus;
-
         return $this;
     }
+
 }

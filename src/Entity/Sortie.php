@@ -74,6 +74,11 @@ class Sortie
      */
     private $lieu;
 
+    /**
+     * @ORM\OneToOne(targetEntity=MessageAnnulation::class, mappedBy="sortie", cascade={"persist", "remove"})
+     */
+    private $messageAnnulation;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -227,6 +232,28 @@ class Sortie
     public function setLieu(?Lieu $lieu): self
     {
         $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    public function getMessageAnnulation(): ?MessageAnnulation
+    {
+        return $this->messageAnnulation;
+    }
+
+    public function setMessageAnnulation(?MessageAnnulation $messageAnnulation): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($messageAnnulation === null && $this->messageAnnulation !== null) {
+            $this->messageAnnulation->setSortie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($messageAnnulation !== null && $messageAnnulation->getSortie() !== $this) {
+            $messageAnnulation->setSortie($this);
+        }
+
+        $this->messageAnnulation = $messageAnnulation;
 
         return $this;
     }

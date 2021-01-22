@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\FiltreSortie;
+use App\Entity\MessageAnnulation;
 use App\Form\FiltreSortieType;
+use App\Form\MessageAnnulationType;
 use App\Repository\SortieRepository;
 use App\Outil\OutilSerie;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,12 +37,26 @@ class HomeController extends AbstractController
 
         //recherche les sorties pour l'utilisateur est inscrit
         $inscrits = $repo->findInscrit($this->getUser()->getId());
-        
+
+        //Gestion message MessageAnnulation
+        $message = new MessageAnnulation();
+        $formMessage = $this->createForm(MessageAnnulationType::class, $message);
+        $formMessage->handleRequest($request);
+        if($formMessage->isSubmitted() && $formMessage->isValid()){
+            $idSortie = $_POST['idSortie'];
+            $message->setSortie($repo->find($idSortie));
+            $em->persist($message);
+            $em->flush();
+            return $this->redirectToRoute('annuleSortie',[
+                'id' => $idSortie
+            ]);
+        }
         return $this->render('home/index.html.twig', [
             'sorties' => $sorties,
             'util' => $util->getLastUsername(),
             'error' => $util->getLastAuthenticationError(),
             'form' => $form->createView(),
+            'formMessage' => $formMessage->createView(),
             'inscrits' => $inscrits
         ]);
     }

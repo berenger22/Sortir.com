@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use phpDocumentor\Reflection\Types\Boolean;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class FiltreSortie
 {
@@ -23,11 +24,13 @@ class FiltreSortie
 
     /**
      * @var \DateTimeInterface|null
+     * @Assert\LessThanOrEqual(propertyPath="finDate", message="doit être avant la date de fin")
      */
     private $debutDate;
 
     /**
      * @var \DateTimeInterface|null
+     * @Assert\GreaterThanOrEqual(propertyPath="debutDate", message="doit être après la date de début")
      */
     private $finDate;
 

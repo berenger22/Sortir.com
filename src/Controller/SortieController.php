@@ -7,6 +7,7 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\LieuType;
 use App\Form\SortieType;
+use App\Outil\MailAnnulation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -91,15 +92,19 @@ class SortieController extends AbstractController
     /**
      * @Route("/annuleSortie/{id}", name="annuleSortie", requirements={"id"="\d+"})
      */
-    public function annulerSortie(Sortie $sortie, EntityManagerInterface $em)
+    public function annulerSortie(Sortie $sortie, EntityManagerInterface $em, MailAnnulation $mail)
     {
         if($sortie->getEtat() != 'Activitée en cours'){
             $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
             $sortie->setEtat($etat);
-            $sortie->removeParticipant($this->getUser());
+            $participants = $sortie->getParticipants()->getValues();
+            foreach ($participants as $participant) {
+                $mail->notify($participant, $sortie);
+                $sortie->removeParticipant($participant);
+            }
             $em->persist($sortie);
             $em->flush();
-            $this->addFlash('success', "Vous avez annulée la sortie !");
+            $this->addFlash('success', "Vous avez annulée la sortie et un mail a été envoyé à chaque inscrit !");
         }else{
             $this->addFlash('success', "Vous ne pouvez pas annulée une sorite en cours.");
         }

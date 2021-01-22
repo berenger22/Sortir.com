@@ -55,7 +55,7 @@
 								<a href="{{path('annuleSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous annuler cette sortie ?')">Annuler</a>
 							{% elseif sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle == 'Clôturée' %}
 								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
-								<a href="{{path('annuleSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous annuler cette sortie ?')">Annuler</a>
+								<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#myModal">Annuler</button>
 							{% else %}
 								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
 							{% endif %}
@@ -71,15 +71,16 @@
 							{% endif %}	
 						{% endif %}
 					</tr>
+					{% include "home/modalMessage.html.twig" %}
 				{% endfor %}
 			</tbody>
 		</tbody>
 	</table>
 	<div class="row justify-content-md-center">
 		<div class="form-group col-md-6">
-			<a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('creerSortie')}}" role="button">Créer une
-													sortie</a>
+			<a class="btn btn-lg btn-outline-secondary btn-block" href="{{path('creerSortie')}}" role="button">Créer une sortie</a>
 		</div>
 	</div>
-</div>{% endblock %}
+</div>
+{% endblock %}
 

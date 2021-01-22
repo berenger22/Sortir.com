@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ParticipantType extends AbstractType
@@ -47,7 +48,11 @@ class ParticipantType extends AbstractType
                 'attr' => [
                     'maxlength' => 50
                 ]
-            ] ) 
+            ])
+            ->add('imageFile', FileType::class, [
+                'label' => 'Image de profil :',
+                'required' => false
+            ])
             ->add('password', PasswordType::class, [
                 'label' => 'Nouveau mot de passe :',
                 'attr' => [

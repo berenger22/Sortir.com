@@ -8,8 +8,14 @@
 		<div class="col-6">
 			<div class="row align-self-center">
 				<div class="text-center mt-5">
-					<img src="{{asset('images/persoMario.jpg')}}" class="rounded"
+					{% if participant.imageName is not null %}
+						<img src="{{asset('images/participants/' ~ participant.imageName)}}" class="rounded"
 						style="max-width: 350px;max-height: 350px;">
+					{% else %}
+						<img src="{{asset('images/participants/key.jpg')}}" class="rounded"
+						style="max-width: 350px;max-height: 350px;">
+					{% endif %}
+					
 				</div>
 			</div>
 		</div>

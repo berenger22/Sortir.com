@@ -1,0 +1,9 @@
+<h1>Annulation de la sortie {{ sortie.nom }}</h1>
+
+<p>Je vous envoie ce mail parce que j'ai du annulée la sortie prévu le : {{sortie.dateHeureDebut|date("d/m/Y / H:i")}}</p>
+
+<h2>Motif de l'annulation</h2>
+
+<p>{{sortie.messageAnnulation.libelle|raw}}</p>
+
+<blockquote>{{ sortie.organise.pseudo }}</blockquote>
