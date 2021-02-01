@@ -8,11 +8,15 @@ use App\Entity\Sortie;
 use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Outil\MailAnnulation;
+use App\Repository\LieuRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 class SortieController extends AbstractController
 {
@@ -88,7 +92,6 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-
     /**
      * @Route("/seDesister/{id}", name="seDesisterSortie", requirements={"id"="\d+"})
      */
@@ -135,5 +138,16 @@ class SortieController extends AbstractController
             $this->addFlash('success', "Vous ne pouvez pas annulée une sorite en cours.");
         }
         return $this->redirectToRoute('home');
-    }  
+    }
+    
+    /**
+     * @Route("/infoLieu/{id}", name="infoLieu", requirements={"id"="\d+"}, methods={"GET"})
+     */
+    public function afficherLieu(int $id, LieuRepository $lieurepo, SerializerInterface $serializer)
+    {
+        $infoLieu = $lieurepo->findLieubyId($id);
+        $json = $serializer->serialize($infoLieu, 'json' ,['groups' => 'infoLieu']);
+        $response = new JsonResponse($json, 200, [], true);
+        return $response;
+    }
 }

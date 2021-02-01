@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Serializable;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,7 +22,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *  {"pseudo"}, message="le pseudo existe déjà"
  * )
  */
-class Participant implements UserInterface
+class Participant implements UserInterface, Serializable
 {
     /**
      * @ORM\Id
@@ -401,6 +402,16 @@ class Participant implements UserInterface
     {
         $this->campus = $campus;
         return $this;
+    }
+
+    public function serialize()
+    {
+        return serialize([$this->id, $this->pseudo, $this->password]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list($this->id, $this->pseudo, $this->password) = unserialize($serialized,["allowed_classes" => false]);
     }
 
 }

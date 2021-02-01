@@ -39,39 +39,58 @@
 						<td>{{sortie.participants|length }}/{{sortie.nbInscriptionsMax}}</td>
 						<td>{{sortie.etat.libelle}}</td>
 						<td>
-						{% for inscrit in inscrits %}
-							{% if inscrit.id == sortie.id %}
-								<i class="bi bi-check2-square"></i>
-							{% endif %}
-						{% endfor %}
+							{% for inscrit in sortie.participants %}
+								{% if inscrit.id == app.user.id %}
+									<i class="bi bi-check2-square"></i>
+								{% endif %}
+							{% endfor %}
 						</td>
 						<td>
 							<a href="{{path('afficherProfil', {'id' : sortie.organise.id})}}" class="btn btn-link">{{sortie.organise.pseudo}}</a>
 						</td>
 						<td>
-						{% if sortie.organise.id == app.user.id %}
-							{% if sortie.etat.libelle == 'Créée' and sortie.etat.libelle != 'Annulée'  %}
-								<a href="{{path('modifSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Modifier</a>
-								<a href="{{path('annuleSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous annuler cette sortie ?')">Annuler</a>
-							{% elseif sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle == 'Clôturée' %}
-								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
-								<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#myModal">Annuler</button>
+							{% if sortie.organise.id == app.user.id %}
+								{% if sortie.etat.libelle == 'Créée' and sortie.etat.libelle != 'Annulée' %}
+									<a href="{{path('modifSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Modifier</a>
+									<a href="{{path('annuleSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous annuler cette sortie ?')">Annuler</a>
+								{% elseif sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle == 'Clôturée' %}
+									<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
+									<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#myModal">Annuler</button>
+								{% else %}
+									<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
+								{% endif %}
+								{% if sortie.etat.libelle == 'Ouverte' %}
+									{% if sortie.participants is not empty %}
+										{% for inscrit in sortie.participants %}
+											{% if inscrit.id == app.user.id %}
+												<a href="{{path('seDesisterSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary mt-1" onclick="return confirm('Etes vous sur de vouloir vous désister à cette sortie ?')">Se désister</a>
+											{% else %}
+												<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
+											{% endif %}
+										{% endfor %}
+									{% else %}
+										<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
+									{% endif %}
+								{% endif %}
 							{% else %}
-								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
+								{% if sortie.etat.libelle != 'Créée' %}
+									<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
+								{% endif %}
+								{% if sortie.etat.libelle == 'Ouverte' %}
+									{% if sortie.participants is not empty %}
+										{% for inscrit in sortie.participants %}
+											{% if inscrit.id == app.user.id %}
+												<a href="{{path('seDesisterSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary mt-1" onclick="return confirm('Etes vous sur de vouloir vous désister à cette sortie ?')">Se désister</a>
+											{% else %}
+												<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
+											{% endif %}
+										{% endfor %}
+									{% else %}
+										<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
+									{% endif %}
+								{% endif %}
 							{% endif %}
-							{% if sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle !='Clôturée'  %}
-								<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
-								<a href="{{path('seDesisterSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary mt-1" onclick="return confirm('Etes vous sur de vouloir vous désister à cette sortie ?')">Se désister</a>
-							{% endif %}
-						{% else %}
-							{% if sortie.etat.libelle != 'Créée' %}
-								<a href="{{path('afficherSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary">Afficher</a>
-							{% endif %}	
-							{% if sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle !='Clôturée'%}
-								<a href="{{path('inscriptionSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cette sortie ?')">S'incrire</a>
-								<a href="{{path('seDesisterSortie', {'id' : sortie.id})}}" class="btn btn-outline-primary mt-1" onclick="return confirm('Etes vous sur de vouloir vous désister à cette sortie ?')">Se désister</a>
-							{% endif %}	
-						{% endif %}
+						</td>
 					</tr>
 					{% include "home/modalMessage.html.twig" %}
 				{% endfor %}

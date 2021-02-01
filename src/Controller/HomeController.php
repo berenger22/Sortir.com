@@ -29,14 +29,11 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
         $filtre->setIdUser($this->getUser()->getId());
         
-        //Recherche les sorties selon le filtre et gère les états
+        //Recherche les sorties selon le filtre et gère les états(etat en attente demande trop de ressource)
         $sorties = $repo->findAllSorties($filtre);
-        foreach ($sorties as $sortie) {
-            $outil = OutilSerie::gererEtat($sortie, $em);
-        }
-
-        //recherche les sorties pour l'utilisateur est inscrit
-        $inscrits = $repo->findInscrit($this->getUser()->getId());
+        // foreach ($sorties as $sortie) {
+        //     $outil = OutilSerie::gererEtat($sortie, $em);
+        // }
 
         //Gestion message MessageAnnulation
         $message = new MessageAnnulation();
@@ -56,8 +53,7 @@ class HomeController extends AbstractController
             'util' => $util->getLastUsername(),
             'error' => $util->getLastAuthenticationError(),
             'form' => $form->createView(),
-            'formMessage' => $formMessage->createView(),
-            'inscrits' => $inscrits
+            'formMessage' => $formMessage->createView()
         ]);
     }
 }

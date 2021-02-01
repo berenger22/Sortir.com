@@ -22,7 +22,13 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findAllSorties(FiltreSortie $filtre)
     {
-        $query = $this->createQueryBuilder('s');
+        $query = $this->createQueryBuilder('s')
+                    ->leftJoin('s.participants', 'p')
+                    ->addSelect('p')
+                    ->leftJoin('s.etat', 'e')
+                    ->addSelect('e')
+                    ->leftJoin('s.campus', 'ca')
+                    ->addSelect('ca');
         if($filtre->getCampus()){
             $idCampus = $filtre->getCampus()->getId();
             $query = $query->andWhere("s.campus = :campus")
@@ -58,15 +64,6 @@ class SortieRepository extends ServiceEntityRepository
                             ->setParameter("passee", "Passée");
         }
         return $query->getQuery()->getResult();
-    }
-
-    public function findInscrit($id)
-    {
-        return $this->createQueryBuilder('s')
-                ->andWhere(":inscrit MEMBER OF s.participants")
-                ->setParameter("inscrit", $id)
-                ->getQuery()
-                ->getResult();
     }
 
     // /**

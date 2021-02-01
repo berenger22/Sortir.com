@@ -30,6 +30,7 @@ class ParticipantController extends AbstractController
                 $this->addFlash('success', "La modification a bien été effectué");
                 return $this->redirectToRoute('home');
             }
+            $em->refresh($participant);
         return $this->render('participant/editProfil.html.twig', [
             'form' => $form->createView()
         ]);

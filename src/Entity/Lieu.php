@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\LieuRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LieuRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=LieuRepository::class)
@@ -16,31 +17,37 @@ class Lieu
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("infoLieu")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups("infoLieu")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=80)
+     * @Groups("infoLieu")
      */
     private $rue;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("infoLieu")
      */
     private $latitude;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("infoLieu")
      */
     private $longitude;
 
     /**
      * @ORM\ManyToOne(targetEntity=Ville::class, inversedBy="lieux")
+     * @Groups("infoLieu")
      */
     private $ville;
 
